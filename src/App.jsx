@@ -3,12 +3,19 @@ import { QRCodeSVG } from 'qrcode.react'
 import { toPng } from 'html-to-image'
 
 const HISTORY_KEY = 'lva_qr_history'
+const STYLE_PRESETS = [
+  { name: 'Classic', fgColor: '#000000', bgColor: '#ffffff', borderColor: '#d6dce4' },
+  { name: 'Navy + Orange', fgColor: '#1F3C68', bgColor: '#F7941D', borderColor: '#1F3C68' },
+  { name: 'Orange + Navy', fgColor: '#F7941D', bgColor: '#1F3C68', borderColor: '#F7941D' },
+  { name: 'Slate', fgColor: '#1B263B', bgColor: '#E8EEF6', borderColor: '#415A77' },
+]
 
 function App() {
   const [url, setUrl] = useState('')
-  const [fgColor, setFgColor] = useState('#000000')
-  const [bgColor, setBgColor] = useState('#ffffff')
-  const [borderColor, setBorderColor] = useState('#d6dce4')
+  const [styleIndex, setStyleIndex] = useState(0)
+  const [fgColor, setFgColor] = useState(STYLE_PRESETS[0].fgColor)
+  const [bgColor, setBgColor] = useState(STYLE_PRESETS[0].bgColor)
+  const [borderColor, setBorderColor] = useState(STYLE_PRESETS[0].borderColor)
   const [history, setHistory] = useState([])
   const [historyOpen, setHistoryOpen] = useState(true)
   const [studioOpen, setStudioOpen] = useState(true)
@@ -56,6 +63,19 @@ function App() {
     }
   }
 
+  const applyStylePreset = (index) => {
+    const preset = STYLE_PRESETS[index]
+    setStyleIndex(index)
+    setFgColor(preset.fgColor)
+    setBgColor(preset.bgColor)
+    setBorderColor(preset.borderColor)
+  }
+
+  const cycleStylePreset = () => {
+    const nextIndex = (styleIndex + 1) % STYLE_PRESETS.length
+    applyStylePreset(nextIndex)
+  }
+
   return (
     <div className="layout">
       <aside className="sidebar">
@@ -80,9 +100,7 @@ function App() {
                 <button
                   className="scheme-btn"
                   onClick={() => {
-                    setFgColor('#1F3C68')
-                    setBgColor('#F7941D')
-                    setBorderColor('#1F3C68')
+                    applyStylePreset(1)
                   }}
                   type="button"
                 >
@@ -91,9 +109,7 @@ function App() {
                 <button
                   className="scheme-btn"
                   onClick={() => {
-                    setFgColor('#F7941D')
-                    setBgColor('#1F3C68')
-                    setBorderColor('#F7941D')
+                    applyStylePreset(2)
                   }}
                   type="button"
                 >
@@ -160,6 +176,12 @@ function App() {
             </div>
 
             <div className="preview-card">
+              <div className="style-row">
+                <span className="style-label">Style: {STYLE_PRESETS[styleIndex].name}</span>
+                <button onClick={cycleStylePreset} className="style-btn" type="button">
+                  Change QR Style
+                </button>
+              </div>
               <div
                 ref={qrRef}
                 className="qr-container"
