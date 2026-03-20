@@ -5,9 +5,10 @@ import { toPng } from 'html-to-image'
 const HISTORY_KEY = 'lva_qr_history'
 
 function App() {
-  const [url, setUrl] = useState('https://www.lvastudio.tech/')
+  const [url, setUrl] = useState('')
   const [fgColor, setFgColor] = useState('#000000')
   const [bgColor, setBgColor] = useState('#ffffff')
+  const [borderColor, setBorderColor] = useState('#d6dce4')
   const [history, setHistory] = useState([])
   const [historyOpen, setHistoryOpen] = useState(true)
   const [studioOpen, setStudioOpen] = useState(true)
@@ -81,6 +82,7 @@ function App() {
                   onClick={() => {
                     setFgColor('#1F3C68')
                     setBgColor('#F7941D')
+                    setBorderColor('#1F3C68')
                   }}
                   type="button"
                 >
@@ -91,6 +93,7 @@ function App() {
                   onClick={() => {
                     setFgColor('#F7941D')
                     setBgColor('#1F3C68')
+                    setBorderColor('#F7941D')
                   }}
                   type="button"
                 >
@@ -113,6 +116,15 @@ function App() {
                   type="color"
                   value={bgColor}
                   onChange={(e) => setBgColor(e.target.value)}
+                />
+              </div>
+              <div className="color-row">
+                <label htmlFor="border-color">Border</label>
+                <input
+                  id="border-color"
+                  type="color"
+                  value={borderColor}
+                  onChange={(e) => setBorderColor(e.target.value)}
                 />
               </div>
             </div>
@@ -139,13 +151,20 @@ function App() {
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="Enter URL..."
               />
+              <button onClick={() => setUrl('')} className="ghost-btn" type="button">
+                Clear Input
+              </button>
               <button onClick={saveToHistory} className="save-btn" type="button">
                 Save to History
               </button>
             </div>
 
             <div className="preview-card">
-              <div ref={qrRef} className="qr-container" style={{ backgroundColor: bgColor }}>
+              <div
+                ref={qrRef}
+                className="qr-container"
+                style={{ backgroundColor: bgColor, borderColor }}
+              >
                 <QRCodeSVG value={url || ' '} size={256} fgColor={fgColor} bgColor={bgColor} />
               </div>
               <p className="url-display">{url}</p>

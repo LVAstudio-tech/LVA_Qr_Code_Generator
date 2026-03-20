@@ -154,7 +154,7 @@ body {
 .input-box {
   padding: 12px;
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto auto;
   gap: 10px;
 }
 
@@ -217,6 +217,16 @@ button:hover {
 
 .dl-btn:hover {
   background: #d89b10;
+}
+
+.ghost-btn {
+  background: #eef3f9;
+  color: #1b263b;
+  border: 1px solid #c5d1df;
+}
+
+.ghost-btn:hover {
+  background: #dfe9f5;
 }
 
 @media (max-width: 900px) {
