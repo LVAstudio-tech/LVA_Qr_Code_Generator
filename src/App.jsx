@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import QRCode from 'react-qr-code'
+import { QRCodeSVG } from 'qrcode.react'
 import { toPng } from 'html-to-image'
 
 const HISTORY_KEY = 'lva_qr_history'
@@ -108,7 +108,7 @@ function App() {
 
         <div className="preview-card">
           <div ref={qrRef} className="qr-container" style={{ backgroundColor: bgColor }}>
-            <QRCode value={url || ' '} size={256} fgColor={fgColor} bgColor={bgColor} />
+            <QRCodeSVG value={url || ' '} size={256} fgColor={fgColor} bgColor={bgColor} />
           </div>
           <p className="url-display">{url}</p>
           <button onClick={downloadQr} className="dl-btn" type="button">
