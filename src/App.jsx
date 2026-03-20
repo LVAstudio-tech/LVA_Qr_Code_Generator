@@ -9,6 +9,8 @@ function App() {
   const [fgColor, setFgColor] = useState('#000000')
   const [bgColor, setBgColor] = useState('#ffffff')
   const [history, setHistory] = useState([])
+  const [historyOpen, setHistoryOpen] = useState(true)
+  const [studioOpen, setStudioOpen] = useState(true)
   const qrRef = useRef(null)
 
   useEffect(() => {
@@ -56,65 +58,103 @@ function App() {
   return (
     <div className="layout">
       <aside className="sidebar">
-        <h2>LVA History</h2>
-        <div className="history-list">
-          {history.map((item, i) => (
-            <button key={`${item}-${i}`} onClick={() => setUrl(item)} className="history-item" type="button">
-              {item.length > 24 ? `${item.slice(0, 24)}...` : item}
-            </button>
-          ))}
-        </div>
-
-        <div className="color-section">
-          <h4>Custom Colors</h4>
-          <div className="color-row">
-            <label htmlFor="dots-color">Dots</label>
-            <input
-              id="dots-color"
-              type="color"
-              value={fgColor}
-              onChange={(e) => setFgColor(e.target.value)}
-            />
-          </div>
-          <div className="color-row">
-            <label htmlFor="bg-color">BG</label>
-            <input
-              id="bg-color"
-              type="color"
-              value={bgColor}
-              onChange={(e) => setBgColor(e.target.value)}
-            />
-          </div>
-        </div>
-
-        <button className="clear-btn" onClick={clearAll} type="button">
-          Clear All
+        <button className="section-toggle" onClick={() => setHistoryOpen((open) => !open)} type="button">
+          <span>History</span>
+          <span>{historyOpen ? '−' : '+'}</span>
         </button>
+
+        {historyOpen && (
+          <>
+            <div className="history-list">
+              {history.map((item, i) => (
+                <button key={`${item}-${i}`} onClick={() => setUrl(item)} className="history-item" type="button">
+                  {item.length > 24 ? `${item.slice(0, 24)}...` : item}
+                </button>
+              ))}
+            </div>
+
+            <div className="color-section">
+              <h4>Custom Colors</h4>
+              <div className="quick-schemes">
+                <button
+                  className="scheme-btn"
+                  onClick={() => {
+                    setFgColor('#1F3C68')
+                    setBgColor('#F7941D')
+                  }}
+                  type="button"
+                >
+                  Navy + Orange
+                </button>
+                <button
+                  className="scheme-btn"
+                  onClick={() => {
+                    setFgColor('#F7941D')
+                    setBgColor('#1F3C68')
+                  }}
+                  type="button"
+                >
+                  Orange + Navy
+                </button>
+              </div>
+              <div className="color-row">
+                <label htmlFor="dots-color">Dots</label>
+                <input
+                  id="dots-color"
+                  type="color"
+                  value={fgColor}
+                  onChange={(e) => setFgColor(e.target.value)}
+                />
+              </div>
+              <div className="color-row">
+                <label htmlFor="bg-color">BG</label>
+                <input
+                  id="bg-color"
+                  type="color"
+                  value={bgColor}
+                  onChange={(e) => setBgColor(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <button className="clear-btn" onClick={clearAll} type="button">
+              Clear All
+            </button>
+          </>
+        )}
       </aside>
 
       <main className="main-content">
-        <h1>LVA QR Studio</h1>
-        <div className="input-box">
-          <input
-            type="text"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="Enter URL..."
-          />
-          <button onClick={saveToHistory} className="save-btn" type="button">
-            Save to History
-          </button>
-        </div>
+        <button className="section-toggle" onClick={() => setStudioOpen((open) => !open)} type="button">
+          <span>QR Studio</span>
+          <span>{studioOpen ? '−' : '+'}</span>
+        </button>
 
-        <div className="preview-card">
-          <div ref={qrRef} className="qr-container" style={{ backgroundColor: bgColor }}>
-            <QRCodeSVG value={url || ' '} size={256} fgColor={fgColor} bgColor={bgColor} />
-          </div>
-          <p className="url-display">{url}</p>
-          <button onClick={downloadQr} className="dl-btn" type="button">
-            Download PNG
-          </button>
-        </div>
+        {studioOpen && (
+          <>
+            <div className="input-box">
+              <input
+                type="text"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="Enter URL..."
+              />
+              <button onClick={saveToHistory} className="save-btn" type="button">
+                Save to History
+              </button>
+            </div>
+
+            <div className="preview-card">
+              <div ref={qrRef} className="qr-container" style={{ backgroundColor: bgColor }}>
+                <QRCodeSVG value={url || ' '} size={256} fgColor={fgColor} bgColor={bgColor} />
+              </div>
+              <p className="url-display">{url}</p>
+              <button onClick={downloadQr} className="dl-btn" type="button">
+                Download PNG
+              </button>
+            </div>
+          </>
+        )}
       </main>
     </div>
   )
